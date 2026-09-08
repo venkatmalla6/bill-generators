@@ -662,21 +662,15 @@ class _ReceiptFieldRow extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           // Value immediately following the label
-          Text(
-            value,
-            style: GoogleFonts.lato(
-              fontSize: 13,
-              fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
-              color: valueColor ?? AppColors.textPrimary,
-              letterSpacing: 0.2,
-            ),
-          ),
-          const SizedBox(width: 8),
-          // Trailing dotted blank line filling the rest of the row
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 2),
-              child: _DottedLine(),
+            child: Text(
+              value,
+              style: GoogleFonts.lato(
+                fontSize: 13,
+                fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
+                color: valueColor ?? AppColors.textPrimary,
+                letterSpacing: 0.2,
+              ),
             ),
           ),
         ],
@@ -685,7 +679,7 @@ class _ReceiptFieldRow extends StatelessWidget {
   }
 }
 
-/// Amount in words display (with aligned label and trailing dotted line)
+/// Amount in words display (with aligned label)
 class _ReceiptAmountInWords extends StatelessWidget {
   final String words;
 
@@ -708,8 +702,7 @@ class _ReceiptAmountInWords extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          Flexible(
-            fit: FlexFit.loose,
+          Expanded(
             child: Text(
               words,
               style: GoogleFonts.lato(
@@ -719,54 +712,10 @@ class _ReceiptAmountInWords extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 2),
-              child: _DottedLine(),
-            ),
-          ),
         ],
       ),
     );
   }
-}
-
-/// Custom dotted line painter
-class _DottedLine extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _DottedLinePainter(),
-      child: const SizedBox(height: 12),
-    );
-  }
-}
-
-class _DottedLinePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppColors.receiptDottedLine
-      ..strokeWidth = 1;
-
-    const dashWidth = 3.0;
-    const dashSpace = 3.0;
-    double startX = 0;
-    final y = size.height - 3;
-
-    while (startX < size.width) {
-      canvas.drawLine(
-        Offset(startX, y),
-        Offset(startX + dashWidth, y),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(_DottedLinePainter oldDelegate) => false;
 }
 
 /// Compact field for A4 bulk print layout

@@ -281,22 +281,13 @@ class ReceiptPdfService {
             ),
           ),
           pw.SizedBox(width: 10),
-          pw.Text(
-            value,
-            style: pw.TextStyle(
-              fontSize: 11,
-              fontWeight: pw.FontWeight.bold,
-              color: PdfColors.black,
-            ),
-          ),
-          pw.SizedBox(width: 8),
           pw.Expanded(
-            child: pw.Container(
-              margin: const pw.EdgeInsets.only(bottom: 2),
-              child: pw.Divider(
-                borderStyle: pw.BorderStyle.dashed,
-                color: _textMuted,
-                thickness: 0.5,
+            child: pw.Text(
+              value,
+              style: pw.TextStyle(
+                fontSize: 11,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.black,
               ),
             ),
           ),

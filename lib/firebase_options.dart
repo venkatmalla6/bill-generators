@@ -6,13 +6,17 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for AKTS Receipt Management System configured with project 'telugu-5'.
 class DefaultFirebaseOptions {
-  static String get _apiKey =>
+  static String get _webApiKey =>
+      dotenv.env['FIREBASE_WEB_API_KEY'] ??
       dotenv.env['FIREBASE_API_KEY'] ??
-      String.fromCharCodes(const [
-        65, 73, 122, 97, 83, 121, 67, 118, 120, 89, 77, 77, 57, 98, 65, 88,
-        88, 83, 74, 112, 70, 45, 109, 111, 73, 65, 71, 84, 51, 99, 78, 119,
-        67, 81, 81, 68, 85, 53, 56
-      ]);
+      '';
+
+  static String get _androidApiKey =>
+      dotenv.env['FIREBASE_ANDROID_API_KEY'] ??
+      dotenv.env['FIREBASE_API_KEY'] ??
+      '';
+
+  static String get _apiKey => _webApiKey;
 
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -39,8 +43,8 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions get web => FirebaseOptions(
-    apiKey: _apiKey,
-    appId: '1:793854751604:web:4661231e16edf5c0837221',
+    apiKey: _webApiKey,
+    appId: '1:793854751604:web:a30e988f64ae0e02837221',
     messagingSenderId: '793854751604',
     projectId: 'telugu-5',
     authDomain: 'telugu-5.firebaseapp.com',
@@ -49,7 +53,7 @@ class DefaultFirebaseOptions {
   );
 
   static FirebaseOptions get android => FirebaseOptions(
-    apiKey: _apiKey,
+    apiKey: _androidApiKey,
     appId: '1:793854751604:android:4661231e16edf5c0837221',
     messagingSenderId: '793854751604',
     projectId: 'telugu-5',
@@ -79,7 +83,7 @@ class DefaultFirebaseOptions {
 
   static FirebaseOptions get windows => FirebaseOptions(
     apiKey: _apiKey,
-    appId: '1:793854751604:web:4661231e16edf5c0837221',
+    appId: '1:793854751604:web:a30e988f64ae0e02837221',
     messagingSenderId: '793854751604',
     projectId: 'telugu-5',
     authDomain: 'telugu-5.firebaseapp.com',
