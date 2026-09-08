@@ -94,6 +94,12 @@ class _BulkPrintScreenState extends ConsumerState<BulkPrintScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<ReceiptHistoryState>(receiptHistoryControllerProvider, (_, next) {
+      ref.read(bulkPrintControllerProvider.notifier).setReceipts(
+        next.receipts.where((r) => r.isValid).toList(),
+      );
+    });
+
     final bulkState = ref.watch(bulkPrintControllerProvider);
     final historyState = ref.watch(receiptHistoryControllerProvider);
 

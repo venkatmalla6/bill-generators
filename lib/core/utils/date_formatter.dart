@@ -50,18 +50,23 @@ class DateFormatter {
     }
   }
 
-  /// Check if a date is today
+  /// Check if a date is today (in local timezone, or within recent 24h work cycle)
   static bool isToday(DateTime date) {
-    final now = DateTime.now();
-    return date.year == now.year &&
-        date.month == now.month &&
-        date.day == now.day;
+    final d = date.toLocal();
+    final now = DateTime.now().toLocal();
+    if (d.year == now.year && d.month == now.month && d.day == now.day) {
+      return true;
+    }
+    // Also include recent receipts created within the last 24 hours across midnight transition
+    final diff = now.difference(d);
+    return !diff.isNegative && diff.inHours < 24 && (now.day - d.day).abs() <= 1;
   }
 
-  /// Check if a date is in the current month
+  /// Check if a date is in the current month (in local timezone)
   static bool isCurrentMonth(DateTime date) {
-    final now = DateTime.now();
-    return date.year == now.year && date.month == now.month;
+    final d = date.toLocal();
+    final now = DateTime.now().toLocal();
+    return d.year == now.year && d.month == now.month;
   }
 
   /// Get start of today

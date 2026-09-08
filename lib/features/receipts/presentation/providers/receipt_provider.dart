@@ -39,10 +39,14 @@ final dashboardStatsProvider =
   return receiptsAsync.whenData((receipts) {
     final active = receipts.where((r) => !r.isDeleted).toList();
     final validReceipts = active.where((r) => r.isValid).toList();
-    final todayReceipts =
-        validReceipts.where((r) => DateFormatter.isToday(r.date)).toList();
-    final monthReceipts =
-        validReceipts.where((r) => DateFormatter.isCurrentMonth(r.date)).toList();
+    final todayReceipts = validReceipts.where((r) {
+      return DateFormatter.isToday(r.date) ||
+          DateFormatter.isToday(r.createdAt);
+    }).toList();
+    final monthReceipts = validReceipts.where((r) {
+      return DateFormatter.isCurrentMonth(r.date) ||
+          DateFormatter.isCurrentMonth(r.createdAt);
+    }).toList();
 
     final totalAmount =
         validReceipts.fold<double>(0, (sum, r) => sum + r.amount);
@@ -300,9 +304,39 @@ class ReceiptHistoryController extends StateNotifier<ReceiptHistoryState> {
   final Ref _ref;
 
   ReceiptHistoryController(this._repository, this._ref)
-      : super(const ReceiptHistoryState());
+      : super(const ReceiptHistoryState()) {
+    _initStream();
+  }
+
+  void _initStream() {
+    _ref.listen<AsyncValue<List<ReceiptModel>>>(
+      receiptsStreamProvider,
+      (previous, next) {
+        next.whenData((receipts) {
+          _updateReceipts(receipts);
+        });
+      },
+      fireImmediately: true,
+    );
+  }
+
+  void _updateReceipts(List<ReceiptModel> receipts) {
+    state = state.copyWith(
+      isLoading: false,
+      receipts: receipts,
+    );
+    applyFilters(
+      searchQuery: state.searchQuery,
+      statusFilter: state.statusFilter,
+      paymentModeFilter: state.paymentModeFilter,
+      membershipYearFilter: state.membershipYearFilter,
+      startDate: state.startDate,
+      endDate: state.endDate,
+    );
+  }
 
   Future<void> loadReceipts() async {
+    _ref.invalidate(receiptsStreamProvider);
     state = state.copyWith(isLoading: true);
     try {
       final user = _ref.read(currentUserProvider);
@@ -312,11 +346,7 @@ class ReceiptHistoryController extends StateNotifier<ReceiptHistoryState> {
         userId: user.uid,
         isAdmin: user.isAdmin,
       );
-      state = state.copyWith(
-        isLoading: false,
-        receipts: receipts,
-        filtered: receipts,
-      );
+      _updateReceipts(receipts);
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
