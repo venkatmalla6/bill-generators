@@ -37,6 +37,11 @@ class DateFormatter {
     return _fullFormat.format(date);
   }
 
+  /// Format date and time for display: 04-09-2026 14:30
+  static String toDisplayDateTime(DateTime date) {
+    return _fullFormat.format(date);
+  }
+
   /// Parse a display-format date string to DateTime
   static DateTime? parseDisplayDate(String dateStr) {
     try {

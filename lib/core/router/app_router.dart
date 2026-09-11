@@ -16,6 +16,9 @@ import '../../features/verification/presentation/screens/verification_screen.dar
 import '../../features/qr/presentation/screens/qr_scanner_screen.dart';
 import '../../features/bulk_print/presentation/screens/bulk_print_screen.dart';
 import '../../features/settings/presentation/screens/settings_screen.dart';
+import '../../features/payment_details/presentation/screens/create_payment_details_screen.dart';
+import '../../features/payment_details/presentation/screens/payment_details_history_screen.dart';
+import '../../features/payment_details/presentation/screens/payment_details_preview_screen.dart';
 
 // Route names
 class AppRoutes {
@@ -30,10 +33,14 @@ class AppRoutes {
   static const scanQr = '/scan-qr';
   static const bulkPrint = '/bulk-print';
   static const settings = '/settings';
+  static const paymentDetails = '/payment-details';
+  static const createPaymentDetails = '/payment-details/create';
+  static const paymentDetailsPreview = '/payment-details/:id';
 
   // Named helpers
   static String receiptPreviewPath(String id) => '/receipts/$id';
   static String verifyPath(String verificationId) => '/verify/$verificationId';
+  static String paymentDetailsPreviewPath(String id) => '/payment-details/$id';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -148,6 +155,26 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.settings,
         name: 'settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+
+      // ── Payment Done Details ──────────────────────────────────────────────
+      GoRoute(
+        path: AppRoutes.paymentDetails,
+        name: 'payment-details',
+        builder: (context, state) => const PaymentDetailsHistoryScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.createPaymentDetails,
+        name: 'create-payment-details',
+        builder: (context, state) => const CreatePaymentDetailsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.paymentDetailsPreview,
+        name: 'payment-details-preview',
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return PaymentDetailsPreviewScreen(paymentId: id);
+        },
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

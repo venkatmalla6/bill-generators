@@ -17,6 +17,7 @@ class AppConstants {
   // Firestore Collection Names
   static const String usersCollection = 'users';
   static const String receiptsCollection = 'receipts';
+  static const String paymentsDoneCollection = 'payments_done';
   static const String settingsCollection = 'settings';
   static const String countersCollection = 'counters';
   static const String applicationSettingsDoc = 'application';

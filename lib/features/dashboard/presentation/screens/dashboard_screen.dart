@@ -446,39 +446,56 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   Widget _buildQuickActions() {
-    return GridView.count(
-      crossAxisCount: 4,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
-      childAspectRatio: 0.9,
-      children: [
-        QuickActionButton(
-          label: 'CREATE\nRECEIPT',
-          icon: Icons.add_circle_outline,
-          color: AppColors.navyPrimary,
-          onTap: () => context.push(AppRoutes.createReceipt),
-        ),
-        QuickActionButton(
-          label: 'RECEIPT\nHISTORY',
-          icon: Icons.history,
-          color: AppColors.navyLight,
-          onTap: () => context.push(AppRoutes.receiptHistory),
-        ),
-        QuickActionButton(
-          label: 'SCAN\nQR',
-          icon: Icons.qr_code_scanner,
-          color: AppColors.navyMedium,
-          onTap: () => context.push(AppRoutes.scanQr),
-        ),
-        QuickActionButton(
-          label: 'A4\nPRINT',
-          icon: Icons.print_outlined,
-          color: AppColors.navyDark,
-          onTap: () => context.push(AppRoutes.bulkPrint),
-        ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final crossAxisCount = constraints.maxWidth >= 720 ? 6 : 3;
+        return GridView.count(
+          crossAxisCount: crossAxisCount,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 0.95,
+          children: [
+            QuickActionButton(
+              label: 'CREATE\nRECEIPT',
+              icon: Icons.add_circle_outline,
+              color: AppColors.navyPrimary,
+              onTap: () => context.push(AppRoutes.createReceipt),
+            ),
+            QuickActionButton(
+              label: 'PAYMENT\nDONE',
+              icon: Icons.payments_outlined,
+              color: const Color(0xFFD97706),
+              onTap: () => context.push(AppRoutes.createPaymentDetails),
+            ),
+            QuickActionButton(
+              label: 'PAYMENT\nHISTORY',
+              icon: Icons.receipt_long_outlined,
+              color: const Color(0xFF0284C7),
+              onTap: () => context.push(AppRoutes.paymentDetails),
+            ),
+            QuickActionButton(
+              label: 'RECEIPT\nHISTORY',
+              icon: Icons.history,
+              color: AppColors.navyLight,
+              onTap: () => context.push(AppRoutes.receiptHistory),
+            ),
+            QuickActionButton(
+              label: 'SCAN\nQR',
+              icon: Icons.qr_code_scanner,
+              color: AppColors.navyMedium,
+              onTap: () => context.push(AppRoutes.scanQr),
+            ),
+            QuickActionButton(
+              label: 'A4\nPRINT',
+              icon: Icons.print_outlined,
+              color: AppColors.navyDark,
+              onTap: () => context.push(AppRoutes.bulkPrint),
+            ),
+          ],
+        );
+      },
     );
   }
 
